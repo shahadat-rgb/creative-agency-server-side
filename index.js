@@ -29,7 +29,7 @@ client.connect(err => {
   const orderCollection= client.db("creativeAgency").collection("order");
   const reviewCollection= client.db("creativeAgency").collection("review");
   const serviceCollection=client.db("creativeAgency").collection("service");
-  
+  const adminCollection=client.db("creativeAgency").collection("admin");
 
 
   app.post('/order', (req,res) =>{
@@ -40,14 +40,21 @@ client.connect(err => {
     })
  } )
 
- app.get('/getOrderAdmin', (req, res) => {
+ app.get('/show-order', (req, res) => {
     orderCollection.find({})
         .toArray((err, documents) => {
             res.send(documents);
         })
 })
 
+app.get('/show-order-by-mail',(req,res)=>{
+    orderCollection.find({email:req.headers.email})
+    .toArray((error, documents)=>{
+      res.send(documents)
+    })
+  })
 
+ 
 app.post('/review-aria', (req,res) =>{
     reviewCollection.insertOne(req.body)
     .then(result =>{
@@ -106,6 +113,22 @@ app.get('/show-service', (req, res) => {
         })
 });
 
+app.post('/add-admin',(req,res)=>{
+    adminCollection.insertOne({admin:req.body.admin})
+    .then(result=>{
+        console.log(result);
+      res.send(result.insertedCount>0)
+    })
+    .catch(err=>console.log(err))
+  })
+
+
+// app.post('/check-admin', (req, res) => {
+//     adminsCollection.find({admin:req.headers.email})
+//     .toArray((error, documents)=>{
+//       res.send(documents.length>0)
+//       })
+//   });
 
 })
 
