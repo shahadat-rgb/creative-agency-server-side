@@ -123,12 +123,28 @@ app.post('/add-admin',(req,res)=>{
   })
 
 
-// app.post('/check-admin', (req, res) => {
-//     adminsCollection.find({admin:req.headers.email})
-//     .toArray((error, documents)=>{
-//       res.send(documents.length>0)
-//       })
-//   });
+app.get('/check-admin', (req, res) => {
+    adminCollection.find({admin:req.headers.email})
+    .toArray((error, documents)=>{
+      res.send(documents.length>0)
+      })
+  });
+
+
+  app.patch('/update-status',(req,res)=>{
+    ordersCollection.updateOne(
+      {_id:ObjectID(req.body.id)},
+      {
+        $set:{'status':req.body.status}
+      }
+    )
+    .then(result=>{
+      res.send(result.modifiedCount>0)
+    })
+    .catch(err=>console.log(err))
+  })
+
+
 
 })
 
