@@ -62,6 +62,7 @@ app.post('/review-aria', (req,res) =>{
     })
  } )
 
+
  app.get('/getReview', (req, res) => {
     reviewCollection.find({})
         .toArray((err, documents) => {
@@ -112,6 +113,7 @@ app.get('/show-service', (req, res) => {
             res.send(documents);
         })
 });
+
 
 app.post('/add-admin',(req,res)=>{
     adminCollection.insertOne({admin:req.body.admin})
